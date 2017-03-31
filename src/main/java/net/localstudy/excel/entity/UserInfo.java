@@ -10,12 +10,13 @@ public class UserInfo {
 	//student's score in course
 	private double stuScore;
 
-	public long getStuNum() {
+
+	public long getStuId() {
 		return stuId;
 	}
 
-	public void setStuNum(long stuNum) {
-		this.stuId = stuNum;
+	public void setStuId(long stuId) {
+		this.stuId = stuId;
 	}
 
 	public int getStuGroup() {

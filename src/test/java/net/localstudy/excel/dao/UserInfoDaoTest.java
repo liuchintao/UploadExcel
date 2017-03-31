@@ -25,7 +25,7 @@ public class UserInfoDaoTest {
 		for(int i = 0; i < 10; i++){
 			user = new UserInfo();
 			userList.add(user);
-			user.setStuNum(i);
+			user.setStuId(i);
 			user.setStuGroup(i%2);
 			user.setStuScore(100-i);
 		}
