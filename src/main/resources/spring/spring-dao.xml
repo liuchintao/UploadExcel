@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- set relative database properties' value -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	<!-- set c3p0 data ComboPool -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.name}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<!-- setting ComboPool's private properties -->
+		<!-- setting the size of ComboPool -->
+		<property name="maxPoolSize" value="10"/>
+		<property name="minPoolSize" value="5"/>
+		<!-- forbid to commit after closing connection default is false -->
+		<property name="autoCommitOnClose" value="false"/>
+		<!-- setting Timeout is 2000 -->
+		<property name="checkoutTimeout" value="2000"/>
+		<!-- setting reconnect as 5 times -->
+		<property name="acquireRetryAttempts" value="5"/>
+	</bean>
+	
+	<!-- configure sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- setting data ComboPool -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- introduce global Mybatis config file -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<!-- use bean's alias -->
+		<property name="typeAliasesPackage" value="net.localstudy.excel.entity"/>
+		<!-- introduce mapper .xml files -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"/>
+	</bean>
+	
+	<!-- configure dao package to dynamic load in IOC container -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- invoke sqlSessionFactory -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+		<!-- scan package -->
+		<property name="basePackage" value="net.localstudy.excel.dao"/>
+	</bean>
+</beans>
